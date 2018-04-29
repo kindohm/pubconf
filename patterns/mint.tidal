@@ -1,0 +1,29 @@
+bpm 170
+
+hush
+
+-- erebus
+d1 $     
+    every 3 (rev) $ density 2 $ every 2 (|+| note "12") $ (|+| note "-8") $
+        note "0 4 7 11 12 16 19 23" # s "midi" # midichan "6" 
+
+let pmod1 p = stut' 1 0.0625 (|+| note (choose [36,24,12,36,-12])) $ p
+    pmod1' p = sometimesBy 0.1 (sometimesBy 0.1 (pmod1) . shift' 1 . sometimesBy 0.1 (pmod1) . shift' 1 . pmod1) $ p
+
+
+
+-- drums
+d3 $  
+    stack [ 
+        rarely (off 0.0625 ((|*| speed "2") . (|+| n "5"))) $ shift $
+            density 2 $ s "mintstab(3,8)" # n (discretise (1/8) $ irand 33) 
+            # lpf (scale 500 10000 $ slow 20 sine) # cut "8831"
+            # gain "1.1",
+        rep 10 $ n "{0/4 ~ ~ ~ ~}%4" # s "mintkit" # cut "1" # gain "1",
+        rarely (0.125 ~>) $ shift $ n "{~ ~ ~ 2 ~ ~ ~}%2" # s "mintkit" # gain "1.1",
+        rarely (0.25 ~>) $ n "~ 1" # s "mintkit" # gain "0.95",
+        n "{3*4 3*2 [4 ~ ~ 4] 3 ~ ~ ~}%4" # s "mintkit" # cut "82" # gain "0.9",
+        n "{5/16 ~ ~ ~ ~}%4" # s "mintkit" # cut "2",
+        n "~ [~ 6/4] ~ ~" # s "mintkit" # gain "1"]
+
+      hush

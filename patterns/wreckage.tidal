@@ -1,0 +1,64 @@
+bps (190/120)
+
+-- erebus oct 8
+
+
+-- 0.9.4 version
+d1 $ every 3 (slow 2) $ slow 2 $
+  (note $ preplace (1,3) "{1 [~ 1] ~ 1*1 ~ ~ ~ 1*2 ~}%8" (foldEvery [2,3] (subtract (12) <$>) $ "0 2 -1 0 4 12 -3 5 0 14 2"))
+  # dur "{0.1 0.15 0.07 0.1 0.15}%8"
+  # s "midi"
+  # midichan "6"
+
+-- ml 103
+d2 $ slow 18 $ (|+| note (choose [0,12,0])) $
+(|+| note "0") $ note "[{0 -5 -3 -8 -2}%4, {0 5 7 -2 9 11 14}%4, {4 0 12 11 9 5}%4]" # s "midi" # midichan "15"
+
+d2 silence
+
+d3 $ move $ every 4 (chop 4) $ every 5 (rip 0.5 0.1) $ every 6 (# accelerate "-1 1") $ every 7 (rip' 0 1 8 0.25 0.125) $
+stack [
+  degradeBy 0.6 $ shift' 88 $ randcat [brakk "ion1*8", brakk "ion2*8", brakk "ion3*8" ] # cutoff (scale 1000 5000 $ slow 10 sine),
+  -- bd ch cy bt
+  degradeBy 0.3 $ sometimes (density 2) $ n "{0 3 ~ ~ 5/5 ~ 1/2}%4" # n (irand 20) # s "vix" # cutoff (scale 500 10000 $ slow 20 sine),
+  -- sd
+  n "{~ ~ ~ ~ [~ 11/2]}%4" # s "vix",
+  -- cp
+  slow 2 $ n "~ 4 ~ ~" # s "vix",
+  -- ch
+  n "~ ~ 3*2 ~" # s "vix",
+  -- rs
+  n "{[~ 10] ~ 10 ~ ~}%2" # s "vix"]
+
+
+hush
+
+
+
+
+
+
+
+
+keys silence
+
+k7 silence
+
+d1 $
+every 12 (spike') $
+whenmod 9 7 (jux (iter 4)) $
+every 4 (gap 4) $ every 5 (chop 4) $
+every 6 (rip' 0 1 8 0.25 0.25) $
+every 7 (rev) $
+every 11 (#accelerate "-0.5 0.5") $
+every 10 (|=| speed "0.5 -1") $
+every 9 (stut' 4 (0.75) (|*| speed "0.8")) $
+every 8 (stut' 5 0.25 (|*| speed "1.25")) $
+foldEvery [3,4] (1.25 <~) $ stack [
+sometimes (density 2) $ sound (samples "{vixbd vixch ~ ~ vixcy/3 ~ vixbt/2}%4" (irand 20)),
+sound "{~ ~ ~ ~ [~ vixsd/2]}%4",
+slow 2 $ sound "~ vixcp ~ ~",
+sound "~ ~ vixch*2 ~",
+sound "{[~ vixrs] ~ vixrs ~ ~}%2" ] # delay "0" # delaytime "0" # delayfeedback "0"
+
+hush
